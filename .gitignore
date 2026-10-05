@@ -1,0 +1,20 @@
+# Environnement — reconstructible
+.venv/
+__pycache__/
+*.pyc
+
+# Secrets — ne jamais versionner
+.env
+kaggle.json
+
+# Données — trop volumineuses
+data/
+*.csv
+*.parquet
+
+# Système
+.DS_Store
+
+# Outils
+.pytest_cache/
+logs/
