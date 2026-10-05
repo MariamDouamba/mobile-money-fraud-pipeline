@@ -58,8 +58,9 @@ def explorer() -> None:
     taux = fraudes / lignes * 100
     sections.append("\n## Fraude\n")
     sections.append(
-        f"- Transactions frauduleuses : **{fraudes:,}** sur {lignes:,} "
-        f"(**{taux:.3f} %**)".replace(",", " ")
+        f"- Transactions frauduleuses : **{fraudes:,}** sur {lignes:,} (**{taux:.3f} %**)".replace(
+            ",", " "
+        )
     )
     signalees = (
         int(donnees["isFlaggedFlagged"].sum())

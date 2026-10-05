@@ -113,7 +113,7 @@ def extraire() -> Path:
     if not cible.exists():
         trouves = [f.name for f in DESTINATION.iterdir()]
         raise RuntimeError(
-            f"Fichier attendu absent : {FICHIER_PAYSIM}. " f"Fichiers présents : {trouves}"
+            f"Fichier attendu absent : {FICHIER_PAYSIM}. Fichiers présents : {trouves}"
         )
 
     taille_mo = cible.stat().st_size / 1024**2
