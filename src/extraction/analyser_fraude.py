@@ -16,8 +16,16 @@ journal = obtenir_journal("analyse_fraude")
 
 SOURCE = DATA_RAW / "paysim" / FICHIER_PAYSIM
 COLONNES = [
-    "step", "type", "amount", "nameOrig", "oldbalanceOrg",
-    "newbalanceOrig", "nameDest", "oldbalanceDest", "newbalanceDest", "isFraud",
+    "step",
+    "type",
+    "amount",
+    "nameOrig",
+    "oldbalanceOrg",
+    "newbalanceOrig",
+    "nameDest",
+    "oldbalanceDest",
+    "newbalanceDest",
+    "isFraud",
 ]
 
 
@@ -46,10 +54,14 @@ def analyser() -> None:
         print(f"{nom:8} : {fige:.1%} ont un destinataire à solde nul avant et après")
 
     print("\n=== Montants ===")
-    print(f"Fraude   : médiane {fraude['amount'].median():,.0f}, "
-          f"max {fraude['amount'].max():,.0f}")
-    print(f"Normal   : médiane {normal['amount'].median():,.0f}, "
-          f"max {normal['amount'].max():,.0f}")
+    print(
+        f"Fraude   : médiane {fraude['amount'].median():,.0f}, "
+        f"max {fraude['amount'].max():,.0f}"
+    )
+    print(
+        f"Normal   : médiane {normal['amount'].median():,.0f}, "
+        f"max {normal['amount'].max():,.0f}"
+    )
 
     print("\n=== Hypothèse 4 : un transfert suivi d'un retrait ===")
     transferts = set(perimetre.loc[perimetre["type"] == "TRANSFER", "nameDest"])

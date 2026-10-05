@@ -35,10 +35,7 @@ def verifier_identifiants_kaggle() -> None:
     Lève une exception explicite plutôt que de laisser la bibliothèque
     Kaggle échouer avec un message peu lisible.
     """
-    manquants = [
-        cle for cle in ("KAGGLE_USERNAME", "KAGGLE_KEY")
-        if not os.getenv(cle)
-    ]
+    manquants = [cle for cle in ("KAGGLE_USERNAME", "KAGGLE_KEY") if not os.getenv(cle)]
     if manquants:
         raise RuntimeError(
             f"Identifiants Kaggle absents du fichier .env : {', '.join(manquants)}. "

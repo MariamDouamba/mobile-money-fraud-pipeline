@@ -1,0 +1,70 @@
+name: Intégration continue
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  qualite:
+    name: Qualité du code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Installer ruff
+        run: pip install ruff
+
+      - name: Vérifier le style et les erreurs
+        run: ruff check src tests
+
+      - name: Vérifier le formatage
+        run: ruff format --check src tests
+
+  tests:
+    name: Tests unitaires
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt
+
+      - name: Lancer les tests
+        run: pytest
+        env:
+          KAGGLE_USERNAME: utilisateur_factice
+          KAGGLE_KEY: cle_factice
+
+  secrets:
+    name: Détection de secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installer detect-secrets
+        run: pip install detect-secrets
+
+      - name: Rechercher des secrets non déclarés
+        run: |
+          detect-secrets scan \
+            --exclude-files '\.venv|data|logs|\.git' \
+            --baseline .secrets.baseline

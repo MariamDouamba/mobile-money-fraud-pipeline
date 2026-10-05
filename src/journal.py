@@ -37,9 +37,7 @@ def obtenir_journal(nom: str) -> logging.Logger:
 
     # Sortie fichier, un fichier par jour et par script
     horodatage = datetime.now().strftime("%Y%m%d")
-    fichier = logging.FileHandler(
-        LOGS / f"{nom}_{horodatage}.log", encoding="utf-8"
-    )
+    fichier = logging.FileHandler(LOGS / f"{nom}_{horodatage}.log", encoding="utf-8")
     fichier.setFormatter(format_message)
     journal.addHandler(fichier)
 

@@ -51,9 +51,7 @@ def explorer() -> None:
     sections.append("|---|---|---|")
     for operation, nombre in donnees["type"].value_counts().items():
         part = nombre / lignes * 100
-        sections.append(
-            f"| {operation} | {nombre:,} | {part:.1f} % |".replace(",", " ")
-        )
+        sections.append(f"| {operation} | {nombre:,} | {part:.1f} % |".replace(",", " "))
 
     # Fraude
     fraudes = int(donnees["isFraud"].sum())
@@ -63,7 +61,11 @@ def explorer() -> None:
         f"- Transactions frauduleuses : **{fraudes:,}** sur {lignes:,} "
         f"(**{taux:.3f} %**)".replace(",", " ")
     )
-    signalees = int(donnees["isFlaggedFlagged"].sum()) if "isFlaggedFlagged" in donnees else int(donnees["isFlaggedFraud"].sum())
+    signalees = (
+        int(donnees["isFlaggedFlagged"].sum())
+        if "isFlaggedFlagged" in donnees
+        else int(donnees["isFlaggedFraud"].sum())
+    )
     sections.append(f"- Transactions signalées par le système existant : {signalees}")
 
     sections.append("\n### Fraude par type d'opération\n")
@@ -96,9 +98,7 @@ def explorer() -> None:
     # Parties impliquées
     sections.append("\n## Parties impliquées\n")
     marchands = donnees["nameDest"].str.startswith("M").sum()
-    sections.append(
-        f"- Émetteurs distincts : {donnees['nameOrig'].nunique():,}".replace(",", " ")
-    )
+    sections.append(f"- Émetteurs distincts : {donnees['nameOrig'].nunique():,}".replace(",", " "))
     sections.append(
         f"- Destinataires distincts : {donnees['nameDest'].nunique():,}".replace(",", " ")
     )

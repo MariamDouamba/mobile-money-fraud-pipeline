@@ -31,9 +31,7 @@ def preparer() -> None:
     donnees = pd.read_csv(SOURCE)
 
     fraudes = donnees[donnees["isFraud"] == 1]
-    normales = donnees[donnees["isFraud"] == 0].sample(
-        n=TAILLE_NORMAL, random_state=GRAINE
-    )
+    normales = donnees[donnees["isFraud"] == 0].sample(n=TAILLE_NORMAL, random_state=GRAINE)
 
     echantillon = (
         pd.concat([fraudes, normales])
@@ -45,11 +43,11 @@ def preparer() -> None:
 
     journal.info(
         "Échantillon écrit : %d lignes (%d fraudes, %d normales)",
-        len(echantillon), len(fraudes), len(normales),
+        len(echantillon),
+        len(fraudes),
+        len(normales),
     )
-    journal.info(
-        "Taille sur disque : %.1f Mo", CIBLE.stat().st_size / 1024**2
-    )
+    journal.info("Taille sur disque : %.1f Mo", CIBLE.stat().st_size / 1024**2)
 
 
 if __name__ == "__main__":

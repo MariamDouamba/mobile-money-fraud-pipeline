@@ -1,0 +1,21 @@
+[project]
+name = "mobile-money-fraud-pipeline"
+version = "0.1.0"
+description = "Plateforme d'ingestion et de mise à disposition des données de transactions mobile money"
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [".venv", "data", "logs", "notebooks"]
+
+[tool.ruff.lint]
+# E/W : style PEP 8 — F : erreurs réelles — I : ordre des imports
+# B : pièges courants — UP : syntaxe modernisée
+select = ["E", "W", "F", "I", "B", "UP"]
+ignore = ["E501"]  # longueur de ligne gérée par le formateur
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"

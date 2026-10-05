@@ -100,21 +100,20 @@ def extraire() -> Path:
             derniere_erreur = erreur
             journal.warning(
                 "Tentative %d sur %d échouée : %s",
-                tentative, TENTATIVES_MAX, erreur,
+                tentative,
+                TENTATIVES_MAX,
+                erreur,
             )
             if tentative < TENTATIVES_MAX:
                 time.sleep(ATTENTE_ENTRE_TENTATIVES)
     else:
         journal.error("Extraction abandonnée après %d tentatives", TENTATIVES_MAX)
-        raise RuntimeError(
-            f"Échec du téléchargement depuis Kaggle : {derniere_erreur}"
-        )
+        raise RuntimeError(f"Échec du téléchargement depuis Kaggle : {derniere_erreur}")
 
     if not cible.exists():
         trouves = [f.name for f in DESTINATION.iterdir()]
         raise RuntimeError(
-            f"Fichier attendu absent : {FICHIER_PAYSIM}. "
-            f"Fichiers présents : {trouves}"
+            f"Fichier attendu absent : {FICHIER_PAYSIM}. " f"Fichiers présents : {trouves}"
         )
 
     taille_mo = cible.stat().st_size / 1024**2
@@ -125,9 +124,7 @@ def extraire() -> Path:
     journal.info("Empreinte SHA-256 : %s", empreinte)
 
     # Sauvegarde du résultat : trace de l'extraction à côté du fichier
-    (DESTINATION / "EMPREINTE.txt").write_text(
-        f"{empreinte}  {cible.name}\n", encoding="utf-8"
-    )
+    (DESTINATION / "EMPREINTE.txt").write_text(f"{empreinte}  {cible.name}\n", encoding="utf-8")
 
     duree = time.time() - debut
     journal.info("--- Extraction terminée en %.1f s ---", duree)

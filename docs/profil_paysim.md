@@ -1,7 +1,7 @@
 # Profil du jeu de données PaySim
 
-Source : API Kaggle (`ealaxi/paysim1`)  
-Fichier : `PS_20174392719_1491204439457_log.csv`  
+Source : API Kaggle (`ealaxi/paysim1`)
+Fichier : `PS_20174392719_1491204439457_log.csv`
 Volumétrie : 6 362 620 lignes  11 colonnes
 
 

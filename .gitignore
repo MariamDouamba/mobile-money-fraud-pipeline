@@ -18,3 +18,6 @@ data/
 # Outils
 .pytest_cache/
 logs/
+
+# Sessions Marimo
+__marimo__/
