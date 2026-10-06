@@ -18,9 +18,10 @@ journal = obtenir_journal("initialisation_stockage")
 
 
 def initialiser() -> None:
-    s3 = client()
+    # Le provisionnement relève de l'administration, non de l'ingestion
+    s3 = client("admin")
 
-    if compartiment_existe():
+    if compartiment_existe(role="admin"):
         journal.info("Compartiment '%s' déjà présent", BUCKET)
     else:
         s3.create_bucket(Bucket=BUCKET)

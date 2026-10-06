@@ -19,33 +19,44 @@ BUCKET = os.getenv("S3_BUCKET", "lakehouse")
 COUCHES = ("bronze", "silver", "gold")
 
 
-@lru_cache(maxsize=1)
-def client():
-    """Retourne un client S3 configuré, mis en cache.
+@lru_cache(maxsize=2)
+def client(role: str = "ingestion"):
+    """Retourne un client S3 pour le rôle demandé.
 
-    Le cache évite de reconstruire le client à chaque appel : la connexion
-    est établie une fois pour la durée du processus.
+    Deux rôles sont disponibles :
+      - "ingestion" : lecture et écriture des données (usage courant)
+      - "admin"     : administration, notamment la création du compartiment
+
+    Le cloisonnement applique le principe du moindre privilège : les scripts
+    de traitement n'utilisent jamais d'identité administrateur.
     """
+    if role == "admin":
+        cle = os.getenv("S3_ADMIN_ACCESS_KEY")
+        secret = os.getenv("S3_ADMIN_SECRET_KEY")
+    elif role == "ingestion":
+        cle = os.getenv("S3_ACCESS_KEY")
+        secret = os.getenv("S3_SECRET_KEY")
+    else:
+        raise ValueError(f"Rôle inconnu : {role}")
+
     return boto3.client(
         "s3",
         endpoint_url=os.getenv("S3_ENDPOINT"),
-        aws_access_key_id=os.getenv("S3_ACCESS_KEY"),
-        aws_secret_access_key=os.getenv("S3_SECRET_KEY"),
+        aws_access_key_id=cle,
+        aws_secret_access_key=secret,
         config=Config(
             signature_version="s3v4",
-            # Indispensable hors AWS : sans cela, boto3 préfixerait l'adresse
-            # par le nom du compartiment, ce que le serveur local ne gère pas.
             s3={"addressing_style": "path"},
             retries={"max_attempts": 3, "mode": "standard"},
         ),
-        region_name="us-east-1",  # valeur de forme, exigée par le protocole
+        region_name="us-east-1",
     )
 
 
-def compartiment_existe(nom: str = BUCKET) -> bool:
-    """Indique si le compartiment est présent et accessible."""
+def compartiment_existe(nom: str = BUCKET, role: str = "ingestion") -> bool:
+    """Indique si le compartiment est présent et accessible pour ce rôle."""
     try:
-        client().head_bucket(Bucket=nom)
+        client(role).head_bucket(Bucket=nom)
         return True
     except ClientError:
         return False
