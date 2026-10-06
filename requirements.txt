@@ -1,6 +1,8 @@
 anyio==4.15.1
 attrs==26.1.0
 bleach==6.4.0
+boto3==1.43.108
+botocore==1.43.108
 certifi==2026.7.22
 cfgv==3.5.0
 charset-normalizer==3.5.2
@@ -19,6 +21,7 @@ idna==3.20
 iniconfig==2.3.0
 itsdangerous==2.2.0
 jedi==0.20.0
+jmespath==1.1.0
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 jupyter_core==5.9.1
@@ -63,6 +66,7 @@ referencing==0.37.0
 requests==2.34.2
 rpds-py==2026.9.1
 ruff==0.16.10
+s3transfer==0.19.2
 seaborn==0.13.2
 six==1.17.0
 starlette==1.7.0

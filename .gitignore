@@ -21,3 +21,9 @@ logs/
 
 # Sessions Marimo
 __marimo__/
+
+# Archives d'images Docker — volumineuses, rechargées localement
+docker/images/
+
+# Identités S3 — contient des clés
+docker/seaweedfs/s3.json

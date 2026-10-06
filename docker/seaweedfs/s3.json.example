@@ -1,0 +1,30 @@
+{
+  "identities": [
+    {
+      "name": "admin",
+      "credentials": [
+        { "accessKey": "VOTRE_CLE_ADMIN", "secretKey": "VOTRE_SECRET_ADMIN" }
+      ],
+      "actions": ["Admin", "Read", "Write", "List", "Tagging"]
+    },
+    {
+      "name": "ingestion",
+      "credentials": [
+        { "accessKey": "VOTRE_CLE_INGESTION", "secretKey": "VOTRE_SECRET_INGESTION" }
+      ],
+      "actions": [
+        "Read:lakehouse",
+        "Write:lakehouse",
+        "List:lakehouse",
+        "Tagging:lakehouse"
+      ]
+    },
+    {
+      "name": "analyste",
+      "credentials": [
+        { "accessKey": "VOTRE_CLE_ANALYSTE", "secretKey": "VOTRE_SECRET_ANALYSTE" }
+      ],
+      "actions": ["Read:lakehouse/gold", "List:lakehouse/gold"]
+    }
+  ]
+}
