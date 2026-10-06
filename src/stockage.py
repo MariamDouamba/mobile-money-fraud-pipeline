@@ -76,3 +76,22 @@ def chemin(couche: str, *segments: str) -> str:
 def uri(couche: str, *segments: str) -> str:
     """Construit une adresse S3 complète, telle que l'attendent Spark et Delta."""
     return f"s3://{BUCKET}/{chemin(couche, *segments)}"
+
+
+def systeme_fichiers(role: str = "ingestion"):
+    """Retourne un système de fichiers S3 utilisable par pandas et pyarrow."""
+    import s3fs
+
+    if role == "admin":
+        cle = os.getenv("S3_ADMIN_ACCESS_KEY")
+        secret = os.getenv("S3_ADMIN_SECRET_KEY")
+    else:
+        cle = os.getenv("S3_ACCESS_KEY")
+        secret = os.getenv("S3_SECRET_KEY")
+
+    return s3fs.S3FileSystem(
+        key=cle,
+        secret=secret,
+        client_kwargs={"endpoint_url": os.getenv("S3_ENDPOINT")},
+        config_kwargs={"signature_version": "s3v4"},
+    )

@@ -28,6 +28,9 @@ LOGS = RACINE / "logs"
 KAGGLE_DATASET = "ealaxi/paysim1"
 FICHIER_PAYSIM = "PS_20174392719_1491204439457_log.csv"
 
+DOSSIER_PAYSIM = DATA_RAW / "paysim"
+CHEMIN_PAYSIM = DOSSIER_PAYSIM / FICHIER_PAYSIM
+
 
 def verifier_identifiants_kaggle() -> None:
     """Vérifie la présence des identifiants avant tout appel à l'API.

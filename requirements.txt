@@ -1,8 +1,13 @@
+aiobotocore==3.9.2
+aiohappyeyeballs==2.7.1
+aiohttp==3.14.4
+aioitertools==0.13.0
+aiosignal==1.4.0
 anyio==4.15.1
 attrs==26.1.0
 bleach==6.4.0
-boto3==1.43.108
-botocore==1.43.108
+boto3==1.43.106
+botocore==1.43.106
 certifi==2026.7.22
 cfgv==3.5.0
 charset-normalizer==3.5.2
@@ -15,6 +20,8 @@ docutils==0.23
 fastjsonschema==2.22.2
 filelock==4.0.12
 fonttools==4.66.1
+frozenlist==1.8.0
+fsspec==2026.9.0
 h11==0.16.0
 identify==2.6.20
 idna==3.20
@@ -37,6 +44,7 @@ matplotlib==3.11.2
 mdit-py-plugins==0.6.1
 mdurl==0.1.2
 msgspec==0.22.0
+multidict==6.9.1
 narwhals==2.27.0
 nbformat==5.11.1
 nodeenv==1.11.0
@@ -48,6 +56,7 @@ pillow==12.3.0
 platformdirs==4.12.3
 pluggy==1.6.0
 pre_commit==4.6.2
+propcache==0.5.4
 protobuf==7.36.2
 psutil==7.2.2
 pyarrow==25.0.1
@@ -66,6 +75,7 @@ referencing==0.37.0
 requests==2.34.2
 rpds-py==2026.9.1
 ruff==0.16.10
+s3fs==2026.9.0
 s3transfer==0.19.2
 seaborn==0.13.2
 six==1.17.0
@@ -80,3 +90,5 @@ uvicorn==0.54.0
 virtualenv==21.14.5
 webencodings==0.6.1
 websockets==17.2
+wrapt==2.5.0
+yarl==1.25.1
