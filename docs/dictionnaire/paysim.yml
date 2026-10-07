@@ -1,0 +1,155 @@
+libelle: Transactions mobile money (PaySim)
+origine: Kaggle — ealaxi/paysim1, simulateur calibré sur un mois de journaux réels
+responsable: Mariam Douamba
+granularite: Une ligne = une transaction mobile money
+
+colonnes:
+  step:
+    libelle: Pas de temps
+    description: >
+      Heure simulée écoulée depuis le début de la période d'observation.
+      743 pas successifs, numerotes de 1 a 743 sans rupture,
+      soit 30 jours et 23 heures d'observation continue.
+    regle: Converti en horodatage réel en couche silver, à partir d'une date d'origine conventionnelle.
+    rgpd: non
+
+  type:
+    libelle: Nature de l'opération
+    description: >
+      Famille d'opération mobile money. CASH_IN et CASH_OUT correspondent aux
+      dépôts et retraits en espèces chez un agent, TRANSFER à un virement entre
+      comptes, PAYMENT à un paiement marchand, DEBIT à un prélèvement.
+    regle: >
+      Seules TRANSFER et CASH_OUT portent de la fraude dans ce jeu.
+      Le périmètre de détection est restreint à ces deux familles. La
+      correspondance entre PAYMENT et les destinataires marchands est exacte et
+      réciproque, ce qui exclut du périmètre toute ambiguïté sur les soldes.
+    rgpd: non
+
+  amount:
+    libelle: Montant de la transaction
+    description: Montant dans la monnaie locale du simulateur.
+    regle: Doit être strictement positif. Un montant nul signale une anomalie de collecte.
+    rgpd: financier
+
+  nameOrig:
+    libelle: Compte émetteur
+    description: >
+      Identifiant du compte à l'origine de l'opération. Pseudonyme de la forme
+      C suivi d'une suite numérique.
+    regle: Pseudonymisé par empreinte avec sel en couche silver.
+    rgpd: indirect
+
+  oldbalanceOrg:
+    libelle: Solde émetteur avant
+    description: Solde du compte émetteur avant l'opération.
+    regle: >
+      Cohérence attendue avec newbalanceOrig et amount. L'écart à cette
+      cohérence est un signal de détection étudié.
+    rgpd: financier
+
+  newbalanceOrig:
+    libelle: Solde émetteur après
+    description: Solde du compte émetteur après l'opération.
+    regle: Voir oldbalanceOrg.
+    rgpd: financier
+
+  nameDest:
+    libelle: Compte destinataire
+    description: >
+      Identifiant du compte destinataire. Préfixe C pour un client,
+      M pour un marchand.
+    regle: Pseudonymisé par empreinte avec sel en couche silver.
+    rgpd: indirect
+
+  oldbalanceDest:
+    libelle: Solde destinataire avant
+    description: >
+      Solde du compte destinataire avant l'opération. L'absence d'information
+      n'est pas encodée par une valeur nulle mais par la valeur 0.0 : les
+      2 151 495 destinataires marchands portent tous un solde à zéro.
+    regle: >
+      Un zéro est ambigu. Il signale soit l'absence d'information (destinataire
+      marchand, donc famille PAYMENT), soit un solde réellement nul
+      (destinataire client). Les deux cas se distinguent par le préfixe de
+      nameDest. En couche silver, l'absence d'information devient une valeur
+      nulle explicite ; le solde réellement nul reste à zéro.
+    rgpd: financier
+
+  newbalanceDest:
+    libelle: Solde destinataire après
+    description: >
+      Solde du compte destinataire après l'opération. Même encodage de
+      l'absence d'information que oldbalanceDest.
+    regle: Voir oldbalanceDest — distinction par le préfixe de nameDest.
+    rgpd: financier
+
+  isFraud:
+    libelle: Fraude avérée
+    description: >
+      Indique une opération menée par un agent frauduleux ayant pris le contrôle
+      d'un compte : vidage du solde par virement, puis retrait en espèces.
+    regle: >
+      Vérité terrain servant à évaluer les règles de détection.
+      Jamais utilisée comme signal d'entrée d'une règle.
+    rgpd: non
+
+  isFlaggedFraud:
+    libelle: Signalement du dispositif existant
+    description: >
+      Marquage produit par la règle métier historique du simulateur, qui signale
+      les tentatives de virement dépassant un seuil fixe.
+    regle: >
+      Sert de référence de comparaison : toute règle que je propose doit faire
+      mieux que ce dispositif existant.
+    rgpd: non
+
+  _source:
+    libelle: Source d'origine
+    description: Système dont provient l'enregistrement.
+    regle: Ajouté à l'ingestion. Ne provient pas de la source.
+    rgpd: non
+
+  _lot:
+    libelle: Lot d'ingestion
+    description: Identifiant horodaté de l'exécution qui a chargé l'enregistrement.
+    regle: Ajouté à l'ingestion. Permet de rejouer ou d'isoler un chargement.
+    rgpd: non
+
+  _ingere_le:
+    libelle: Date d'ingestion
+    description: Horodatage UTC de l'entrée dans la plateforme.
+    regle: Ajouté à l'ingestion.
+    rgpd: non
+
+constats:
+  - >
+    L'etendue de `step` est 1 a 743, sans aucune valeur manquante. La periode
+    couverte est de 30 jours et 23 heures, et non de 31 jours pleins comme
+    l'annonce la documentation courante du jeu de donnees.
+  - >
+    L'activite varie dans un rapport de 1 a 25 000 selon l'heure : 2 transactions
+    sur les pas 112 et 662, contre 51 352 sur le pas 19. Le simulateur reproduit
+    un cycle jour/nuit marque. Tout dimensionnement de debit se fait sur le pic,
+    jamais sur la moyenne.
+  - >
+    `nameOrig` compte 6 353 307 valeurs distinctes pour 6 362 620 enregistrements,
+    soit 99,85 % d'identifiants uniques. Cette cardinalite explique le plafond du
+    taux de compression observe en Parquet.
+  - >
+    `nameDest` compte 2 722 362 valeurs distinctes, soit 2,3 receptions par
+    destinataire en moyenne. Cette asymetrie entre emetteurs et destinataires est
+    le terrain des regles de detection : un destinataire concentrant les
+    receptions est un signal.
+  - >
+    La correspondance entre la famille PAYMENT et les destinataires marchands est
+    exacte et reciproque : 2 151 495 lignes des deux cotes. Aucun marchand
+    n'apparait dans une autre famille d'operation.
+  - >
+    Les 2 704 388 soldes destinataire a zero se repartissent en 2 151 495
+    absences d'information (marchands) et 552 893 soldes reellement nuls
+    (clients). Quatre zeros sur cinq ne sont pas des zeros.
+  - >
+    Sur le perimetre de detection (TRANSFER et CASH_OUT, 2 770 409 lignes), aucun
+    destinataire marchand n'est present. Les 389 320 soldes a zero qui s'y
+    trouvent sont tous des soldes reellement nuls, donc du signal exploitable.
