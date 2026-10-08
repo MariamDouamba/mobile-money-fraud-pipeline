@@ -51,6 +51,7 @@ Une capture qui ne prouve rien n'a pas sa place ici.
 | `e7-droits-alimentation.png` | le paramétrage des droits d'écriture | ⬜ |
 | `e7-droits-acces.png` | le paramétrage des droits de lecture et de recherche | ⬜ |
 | `e7-cycle-vie-purge.png` | l'exécution de la purge selon la durée de conservation | ⬜ |
+| `e7-ports-locaux.png` | les ports du stockage liés à `127.0.0.1` et non à toutes les interfaces | ⬜ |
 
 ---
 
@@ -113,14 +114,20 @@ et la capturer vaut mieux qu'une page de documentation.
 
 ---
 
-## Captures transverses
+### Captures transverses
 
-| Capture | Usage |
-|---|---|
-| `commun-ci-verte.png` | la chaîne d'intégration continue au vert — E4 et E7 |
-| `commun-tests-passes.png` | la suite de tests exécutée — E4 et E5 |
-| `commun-historique-git.png` | l'historique des commits conventionnels et des versions publiées |
+| Capture | Ce qu'elle prouve | État |
+|---|---|---|
+| `commun-hook-local-secrets.png` | le hook local bloque un commit contenant un secret | ✅ |
+| `commun-ci-secrets-echec.png` | l'intégration continue rattrape un secret poussé malgré le hook | ✅ |
+| `commun-ci-verte.png` | les trois contrôles au vert sur un dépôt propre | ✅ |
+| `commun-branche-protegee.png` | la fusion est bloquée tant qu'un contrôle échoue | ⬜ |
+| `commun-tests-passes.png` | la suite de tests exécutée — E4 et E5 | ⬜ |
+| `commun-historique-git.png` | commits conventionnels, versions publiées | ⬜ |
 
+Les trois premières forment une démonstration complète : le contrôle bloque avant le commit,
+rattrape après, et laisse passer ce qui est propre. Un contrôle qu'on n'a jamais vu échouer
+n'est pas un contrôle vérifié.
 ---
 
 ## Suivi
@@ -130,8 +137,8 @@ et la capturer vaut mieux qu'une page de documentation.
 | E4 | 0 | 12 |
 | E5 | 0 | 6 |
 | E6 | 0 | 7 |
-| E7 | 7 | 21 |
-| Transverses | 0 | 3 |
-| **Total** | **7** | **49** |
+| E7 | 8 | 22 |
+| Transverses | 3 | 6 |
+| **Total** | **11** | **53** |
 
 Mettre ce tableau à jour à chaque capture ajoutée.
