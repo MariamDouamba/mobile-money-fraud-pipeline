@@ -11,9 +11,9 @@ services:
       -s3.config=/etc/seaweedfs/s3.json
       -master.volumeSizeLimitMB=2048
     ports:
-      - "${S3_PORT}:8333"
-      - "${S3_FILER_PORT}:8888"
-      - "${S3_MASTER_PORT}:9333"
+      - "127.0.0.1:${S3_PORT}:8333"
+      - "127.0.0.1:${S3_FILER_PORT}:8888"
+      - "127.0.0.1:${S3_MASTER_PORT}:9333"
     volumes:
       - stockage-data:/data
       - ./seaweedfs/s3.json:/etc/seaweedfs/s3.json:ro
