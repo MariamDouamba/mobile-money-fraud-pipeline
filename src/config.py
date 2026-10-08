@@ -50,3 +50,6 @@ def creer_dossiers() -> None:
     """Crée les dossiers de travail s'ils n'existent pas."""
     for dossier in (DATA_RAW, DATA_INTERIM, DATA_EXTERNAL, LOGS):
         dossier.mkdir(parents=True, exist_ok=True)
+
+
+CLE_FACTICE = "AKIAIOSFODNN7EXAMPLE"
