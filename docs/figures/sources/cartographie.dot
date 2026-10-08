@@ -1,0 +1,25 @@
+digraph CARTO {
+  rankdir=LR;
+  graph [fontname="Helvetica", bgcolor="white", nodesep=0.22, ranksep=1.1, pad=0.25];
+  node [fontname="Helvetica", fontsize=10.5, shape=box, style="filled,rounded", penwidth=1.2];
+  edge [color="#8A8698", penwidth=1.1, arrowsize=0.7];
+
+  s1 [label=<<B>Transactions</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">CSV puis Parquet · PaySim</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.5, height=0.6];
+  s2 [label=<<B>Référentiel des parties</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">base relationnelle · PostgreSQL</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.5, height=0.6];
+  s3 [label=<<B>Taux et plafonds</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">service web · API REST</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.5, height=0.6];
+  s4 [label=<<B>Textes réglementaires</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">pages web · aspiration</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.5, height=0.6];
+  s5 [label=<<B>Sessions applicatives</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">lignes JSON · journaux USSD</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.5, height=0.6];
+
+  bronze [label=<<B>Couche bronze</B><BR/><FONT POINT-SIZE="8.5" COLOR="#4A5C56">copie fidèle et horodatée<BR/>forme de chaque source</FONT>>,
+          fillcolor="#E1F5EE", color="#0F6E56", width=2.1, height=0.95];
+  silver [label=<<B>Couche silver</B><BR/><FONT POINT-SIZE="8.5" COLOR="#55507A">schéma pivot<BR/>structure unique</FONT>>,
+          fillcolor="#EEEDFE", color="#534AB7", width=2.1, height=0.95];
+
+  s1 -> bronze; s2 -> bronze; s3 -> bronze; s4 -> bronze; s5 -> bronze;
+  bronze -> silver [penwidth=1.8, color="#534AB7"];
+}

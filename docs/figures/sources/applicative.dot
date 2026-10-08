@@ -1,0 +1,61 @@
+digraph APP {
+  rankdir=TB;
+  compound=true;
+  graph [fontname="Helvetica", bgcolor="white", nodesep=0.3, ranksep=0.55, pad=0.25];
+  node [fontname="Helvetica", fontsize=10.5, shape=box, style="filled,rounded", penwidth=1.2];
+  edge [color="#8A8698", penwidth=1.1, arrowsize=0.7];
+
+  subgraph cluster_lots {
+    label=<<FONT POINT-SIZE="10" COLOR="#534AB7"><B>Arrivée planifiée</B></FONT>>;
+    labelloc="t"; style="rounded,dashed"; color="#B7B3D6"; margin=10;
+    s1 [label=<<B>Sources fichiers</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">chargement puis rejeu</FONT>>,
+        fillcolor="#EDEDF0", color="#B9B6C4", width=1.85, height=0.58];
+    s2 [label=<<B>Bases de données</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">quotidien</FONT>>,
+        fillcolor="#EDEDF0", color="#B9B6C4", width=1.85, height=0.58];
+    s3 [label=<<B>API et scraping</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">quotidien, hebdomadaire</FONT>>,
+        fillcolor="#EDEDF0", color="#B9B6C4", width=1.85, height=0.58];
+  }
+
+  subgraph cluster_continu {
+    label=<<FONT POINT-SIZE="10" COLOR="#C2660A"><B>Arrivée continue</B></FONT>>;
+    labelloc="t"; style="rounded,dashed"; color="#E0B583"; margin=10;
+    s4 [label=<<B>Flux événements</B><BR/><FONT POINT-SIZE="8" COLOR="#6B7275">poussé en continu</FONT>>,
+        fillcolor="#EDEDF0", color="#B9B6C4", width=1.85, height=0.58];
+  }
+
+  b [label=<<B>Ingestion batch</B><BR/><FONT POINT-SIZE="9" COLOR="#5F5B74">Airflow + Spark</FONT>>,
+     fillcolor="#EEEDFE", color="#534AB7", width=3.6, height=0.62];
+  r [label=<<B>Ingestion temps réel</B><BR/><FONT POINT-SIZE="9" COLOR="#5F5B74">Kafka</FONT>>,
+     fillcolor="#FBF0E1", color="#C2660A", width=2.2, height=0.62];
+
+  lac [shape=plaintext, style="", label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="10" CELLPADDING="0" BGCOLOR="#E1F5EE" COLOR="#0F6E56" STYLE="ROUNDED">
+      <TR><TD COLSPAN="3"><FONT POINT-SIZE="11" COLOR="#0F3F32"><B>Lakehouse médaillon — SeaweedFS / Delta</B></FONT></TD></TR>
+      <TR>
+        <TD BORDER="1" COLOR="#8FCDB9" BGCOLOR="#FFFFFF" CELLPADDING="9" WIDTH="150"><FONT POINT-SIZE="10"><B>Bronze</B></FONT><BR/><FONT POINT-SIZE="8" COLOR="#5F6B66">Brut horodaté</FONT></TD>
+        <TD BORDER="1" COLOR="#8FCDB9" BGCOLOR="#FFFFFF" CELLPADDING="9" WIDTH="150"><FONT POINT-SIZE="10"><B>Silver</B></FONT><BR/><FONT POINT-SIZE="8" COLOR="#5F6B66">Schéma pivot</FONT></TD>
+        <TD BORDER="1" COLOR="#8FCDB9" BGCOLOR="#FFFFFF" CELLPADDING="9" WIDTH="150"><FONT POINT-SIZE="10"><B>Gold</B></FONT><BR/><FONT POINT-SIZE="8" COLOR="#5F6B66">Agrégats et features</FONT></TD>
+      </TR>
+    </TABLE>>];
+
+  c1 [label=<<B>Entrepôt et BI</B><BR/><FONT POINT-SIZE="9" COLOR="#5F5B74">DuckDB</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.0, height=0.62];
+  c2 [label=<<B>API REST</B><BR/><FONT POINT-SIZE="9" COLOR="#5F5B74">FastAPI</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.0, height=0.62];
+  c3 [label=<<B>Moteur de règles</B><BR/><FONT POINT-SIZE="9" COLOR="#5F5B74">Alertes fraude</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=2.0, height=0.62];
+
+  pg [label=<<B>Base opérationnelle</B><BR/><FONT POINT-SIZE="9" COLOR="#5F5B74">PostgreSQL — alertes et suivi des cas</FONT>>,
+      fillcolor="#EDEDF0", color="#B9B6C4", width=3.1, height=0.62];
+
+  { rank=same; s1; s2; s3; s4; }
+  { rank=same; b; r; }
+  { rank=same; c1; c2; c3; }
+
+  s1 -> b; s2 -> b; s3 -> b;
+  s4 -> r [color="#C2660A"];
+  b -> lac; r -> lac [color="#C2660A"];
+  lac -> c1; lac -> c2; lac -> c3;
+  c3 -> pg;
+  pg -> c2 [constraint=false, style=dashed, color="#B9B6C4"];
+}

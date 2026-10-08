@@ -1,0 +1,34 @@
+digraph INFRA {
+  graph [fontname="Helvetica", bgcolor="white", pad=0.25];
+  node [fontname="Helvetica", shape=plaintext];
+
+  poste [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="14" CELLPADDING="0" BGCOLOR="#FFFFFF" COLOR="#8A8698" STYLE="ROUNDED">
+      <TR><TD COLSPAN="3"><FONT POINT-SIZE="12" COLOR="#23282A"><B>Poste de développement</B></FONT></TD></TR>
+
+      <TR><TD COLSPAN="3"><FONT POINT-SIZE="9.5" COLOR="#534AB7"><B>Services conteneurisés — Docker Compose</B></FONT></TD></TR>
+      <TR>
+        <TD BORDER="1" COLOR="#0F6E56" BGCOLOR="#E1F5EE" CELLPADDING="11" WIDTH="178" STYLE="ROUNDED">
+          <FONT POINT-SIZE="11" COLOR="#0F3F32"><B>Profil core</B></FONT><BR/><BR/>
+          <FONT POINT-SIZE="8.5" COLOR="#4A5C56">PostgreSQL, SeaweedFS,<BR/>Airflow, FastAPI,<BR/>Streamlit, MailHog</FONT>
+        </TD>
+        <TD BORDER="1" COLOR="#C2660A" BGCOLOR="#FBF0E1" CELLPADDING="11" WIDTH="178" STYLE="ROUNDED">
+          <FONT POINT-SIZE="11" COLOR="#7A4206"><B>Profil stream</B></FONT><BR/><BR/>
+          <FONT POINT-SIZE="8.5" COLOR="#7A6450">Kafka,<BR/>consommateur de scoring</FONT>
+        </TD>
+        <TD BORDER="1" COLOR="#534AB7" BGCOLOR="#EEEDFE" CELLPADDING="11" WIDTH="178" STYLE="ROUNDED">
+          <FONT POINT-SIZE="11" COLOR="#2E2866"><B>Profil platform</B></FONT><BR/><BR/>
+          <FONT POINT-SIZE="8.5" COLOR="#55507A">Marquez (catalogue),<BR/>Prometheus, Grafana</FONT>
+        </TD>
+      </TR>
+
+      <TR><TD COLSPAN="3"><FONT POINT-SIZE="9.5" COLOR="#6B7275"><B>Hors conteneur — environnement Python local</B></FONT></TD></TR>
+      <TR>
+        <TD COLSPAN="3" BORDER="1" COLOR="#B9B6C4" BGCOLOR="#F4F4F7" CELLPADDING="10" STYLE="ROUNDED">
+          <FONT POINT-SIZE="8.5" COLOR="#4A4A52">PySpark · dbt-core · DuckDB — bibliothèques exécutées dans l’environnement virtuel, sans serveur dédié</FONT>
+        </TD>
+      </TR>
+
+      <TR><TD COLSPAN="3"><FONT POINT-SIZE="9.5" COLOR="#6B7275"><I>Aucune dépendance réseau — exécution intégralement locale</I></FONT></TD></TR>
+    </TABLE>>];
+}
