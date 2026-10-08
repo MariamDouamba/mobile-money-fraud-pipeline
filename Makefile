@@ -19,3 +19,9 @@ core-ps:          ## Liste les conteneurs en cours
 
 clean:            ## Arrête tout et supprime les volumes — données perdues
 	$(COMPOSE) --profile core down -v
+
+figures:
+	@for f in docs/figures/sources/*.dot; do \
+		dot -Tpng -Gdpi=150 $$f -o docs/figures/$$(basename $$f .dot).png; \
+	done
+	@echo "figures regenerees"

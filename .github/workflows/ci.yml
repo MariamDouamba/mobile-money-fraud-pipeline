@@ -64,7 +64,4 @@ jobs:
         run: pip install detect-secrets
 
       - name: Rechercher des secrets non déclarés
-        run: |
-          detect-secrets scan \
-            --exclude-files '\.venv|data|logs|\.git' \
-            --baseline .secrets.baseline
+        run: detect-secrets-hook --baseline .secrets.baseline $(git ls-files)
